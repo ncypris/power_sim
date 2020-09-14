@@ -8,9 +8,9 @@ lm_sim <- function(simNum, N, b1,b0=0)
 {
   
   con <- # create normally distributed data using rnorm() function
-  rerror <- # variance of conservation behavior that is not predicted by conscientiousness
+  rerror <- # variance of pro-environmental behavior that is not predicted by conscientiousness
   y <- # formula: intercept + slope*conscientiousness + random error
-  model1 <- lm() #predict conservation behavior from conscientiousness lm()
+  model1 <- lm() #predict pro-environmental behavior from conscientiousness lm()
   
   # model 1
   est1_x1 <- coef(summary(model1))['con', 'Estimate']
