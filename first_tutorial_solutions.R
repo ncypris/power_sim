@@ -127,5 +127,25 @@ results(power_comp) %>%
     comp_power = mean(comp_sig)
   )
 
-# 4. Simulate Data for a t-test (a 2 x 2 ANOVA).
+# 4. Simulate Data for a t-test.
+
+t_sim <- function(simNum, N, d) {
+  x1 <- rnorm(N, 0, 1)
+  x2 <- rnorm(N, d, 1)
+  
+  t <- t.test(x1, x2, var.equal=TRUE)
+  t_stat <- t$statistic
+  p <- t$p.value
+  sig <- p < .05
+  
+  return(c(t_stat = t_stat, p = p, sig = sig))
+  
+}
+
+power_t <- grid_search(t_sim, params=list(N = c(150, 200, 250)), n.iter = 1000, output='data.frame', d = .3)
+
+results(power_t) %>%
+  group_by(N.test) %>%
+  summarise(power = mean(sig))
+
 

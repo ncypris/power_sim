@@ -44,4 +44,4 @@ results(power_lm) %>%
 
 # 3. Compare model1 with one predictor (b1 = .05) and model2 with two predictors (b1 = .05, b2 = .2, bx = .05).
 
-# 4. Simulate Data for a t-test (a 2 x 2 ANOVA)
+# 4. Simulate Data for a t-test.
