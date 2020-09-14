@@ -3,14 +3,14 @@ if (!require("paramtest")) install.packages("paramtest")
 library(tidyverse)
 library(paramtest)
 
-#XXX Add equation
+# y = b0 + b1 * x + error
 
 set.seed(161)
-lm_sim <- function(simNum, N, b1,b0=0)
+lm_sim <- function(simNum, N, b1, b0 = 0)
 {
   
   con <- # create normally distributed data using rnorm() function
-  rerror <- # variance of pro-environmental behavior that is not predicted by conscientiousness
+  rerror <- # squrt(variance of pro-environmental behavior that is not predicted by conscientiousness)
   y <- # formula: intercept + slope*conscientiousness + random error
   model1 <- lm() #predict pro-environmental behavior from conscientiousness lm()
   
