@@ -1,4 +1,6 @@
-library(tidyverse) #XXX rewrite functions
+if (!require("tidyverse")) install.packages("tidyverse")
+if (!require("paramtest")) install.packages("paramtest")
+library(tidyverse)
 library(paramtest)
 
 #XXX Add equation
@@ -23,7 +25,7 @@ lm_sim <- function(simNum, N, b1,b0=0)
 
 
 
-power_lm <- grid_search(lm_sim, params=list(N = c(50, 100, 150, 200, 250)),
+power_lm <- grid_search(lm_sim, params=list(N = c(150, 200, 250)),
                          n.iter = 1000, output ='data.frame', b1 = .2, parallel = 'snow', ncpus = 4)
 
 results(power_lm) %>%
