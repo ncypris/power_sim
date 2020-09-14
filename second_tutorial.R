@@ -1,5 +1,6 @@
 library(paramtest)
 library(tidyverse)
+library(nlme)
 
 # N = 500
 # b0 = 0
@@ -10,7 +11,7 @@ library(tidyverse)
 
 set.seed(161)
 mlm_sim <- function(simNum, N, b0 = 0, b1, 
-                    var_nation_rint = .5, var_nation_pol_slope = .25,
+                    var_nation_rint = .4, var_nation_pol_slope = .2,
                     varRes = 1)
   
   
@@ -28,7 +29,7 @@ mlm_sim <- function(simNum, N, b0 = 0, b1,
   
   return <- tryCatch({
 
-    model <- nlme::lme(cred ~ pol, random= ~ 0 + pol|nation, data = df)
+    model <- nlme::lme(cred ~ pol, random= ~ 1 + pol|nation, data = df)
     
     b_value <- summary(model)$tTable[[2,1]]
     p_value <- summary(model)$tTable[[2,5]]
@@ -45,7 +46,7 @@ mlm_sim <- function(simNum, N, b0 = 0, b1,
 }
 
 
-power_fessler_all <- grid_search(mlm_sim, n.iter = 1000, params=list(N=c(600, 700, 800, 900)), output='data.frame', b1=.2, parallel='snow', ncpus=4)
+power_fessler_all <- grid_search(mlm_sim, n.iter = 1000, params=list(N=c(600, 700, 800, 900)), output='data.frame', b1 = .2, parallel='snow', ncpus=4)
 
 results(power_fessler_all) %>%
   group_by(N.test) %>%
