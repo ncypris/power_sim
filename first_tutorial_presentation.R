@@ -9,10 +9,10 @@ set.seed(161)
 lm_sim <- function(simNum, N, b1, b0 = 0)
 {
   
-  con <- # create normally distributed data using rnorm() function
-  rerror <- # squrt(variance of pro-environmental behavior that is not predicted by conscientiousness)
-  y <- # formula: intercept + slope*conscientiousness + random error
-  model1 <- lm() #predict pro-environmental behavior from conscientiousness lm()
+  con <- rnorm(N, 0, 1)# create normally distributed data using rnorm() function
+  rerror <- sqrt(1 - b1^2)# squrt(variance of pro-environmental behavior that is not predicted by conscientiousness)
+  y <- b0 + b1*con + rnorm(N, 0, rerror) # formula: intercept + slope*conscientiousness + random error
+  model1 <- lm(y ~ con) #predict pro-environmental behavior from conscientiousness lm()
   
   # model 1
   est1_x1 <- coef(summary(model1))['con', 'Estimate']
@@ -26,7 +26,7 @@ lm_sim <- function(simNum, N, b1, b0 = 0)
 
 
 power_lm <- grid_search(lm_sim, params=list(N = c(150, 200, 250)),
-                         n.iter = 1000, output ='data.frame', b1 = .2, parallel = 'snow', ncpus = 4)
+                         n.iter = 1000, output ='data.frame', b1 = .3, parallel = 'snow', ncpus = 4)
 
 results(power_lm) %>%
   group_by(N.test) %>%

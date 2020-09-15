@@ -22,12 +22,7 @@ lm_sim <- function(simNum, N, b1, b0=0)
   #   geom_bar() +
   #   xlab("error") +
   #   theme_classic()
-  
-  ggplot(df, aes(x = round(rerror, 1))) + 
-    geom_bar() +
-    xlab("error") +
-    theme_classic()
-  
+
   y = b1*con + rnorm(N, 0, rerror)
   model1 = lm(y ~ con)
   
