@@ -70,7 +70,7 @@ results(power_log) %>%
 # would allow us to capture smaller differences between conditions with sufficient statistical power.
 
 #### 1. ####
-# Use the "log_sim" function we created to estimate the smallest difference we can capture
+# Use the "fisher_sim" function we created to estimate the smallest difference we can capture
 # with 90% power, given N = 80.
 
 set.seed(123) #Set seed to reproduce same results.
