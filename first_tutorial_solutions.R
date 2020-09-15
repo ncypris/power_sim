@@ -8,7 +8,26 @@ lm_sim <- function(simNum, N, b1, b0=0)
 {
   
   con <- rnorm(N, 0, 1)
+  
+  # con %>% as_tibble() %>% 
+  # ggplot(aes(x = round(value, 1))) +
+  #   geom_bar() +
+  #   xlab("conscientiousness") +
+  #   theme_classic()
+  
   rerror <- sqrt(1 - b1^2)
+  
+  # rerror %>% as_tibble() %>% 
+  # ggplot(aes(x = round(value, 1))) +
+  #   geom_bar() +
+  #   xlab("error") +
+  #   theme_classic()
+  
+  ggplot(df, aes(x = round(rerror, 1))) + 
+    geom_bar() +
+    xlab("error") +
+    theme_classic()
+  
   y = b1*con + rnorm(N, 0, rerror)
   model1 = lm(y ~ con)
   
@@ -33,6 +52,12 @@ results(power_lm) %>%
     power = mean(sig1_x1)
   )
 
+# ggplot(power_lm$results, aes(x = round(p1_x1, 2))) +
+#   geom_bar() +
+#   facet_wrap(~ N.test, nrow = 1) +
+#   xlab("p values") +
+#   xlim(-0.01, 0.5) +
+#   theme_classic()
 
 ### EXERCISES ##
 
