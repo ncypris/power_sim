@@ -1,3 +1,7 @@
+library(simstudy)
+library(lme4)
+library(lmerTest)
+
 bin_data <- as.data.frame(genCorGen(
   n = 134,
   nvars = 6,
@@ -10,11 +14,9 @@ bin_data <- as.data.frame(genCorGen(
 test
 
 log_sim <- function(simNum,N,t,rho){
-  library(simstudy)
-  library(lme4)
-  library(lmerTest)
+  
   bin_data <- as.data.frame(
-    genCorGen(
+    simstudy::genCorGen(
       n = N,
       nvars = t,
       params1 = c(.35,.3,.25,.15,.10,.05),
@@ -29,12 +31,13 @@ log_sim <- function(simNum,N,t,rho){
                                  "High"))
   bin_data$cond <- ifelse(bin_data$period == 0 | bin_data$period == 1 | bin_data$period == 2, "APUN",
                           "CPUN")
-  mod <- glmer(X~cond+(1|id)+(1|effic), data = bin_data,
+  mod <- lme4::glmer(X~cond+(1|id)+(1|effic), data = bin_data,
                family = binomial(link = "logit"))
+  
   summary(mod)
+  
   p_val1 <- summary(mod)$coefficients[2,4] #Extract p-value for 3rd factor from outcome.
  
-  
   sig1 <- p_val1 < .05 #Returns TRUE if p-value < alpha.
 
   return(c(p_val1 = p_val1, sig1 = sig1))
