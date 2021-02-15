@@ -1,0 +1,160 @@
+---
+title: "balafoutas_exercise"
+author: "Daniel Toribio-Flórez"
+date: "15/02/2021"
+output: html_document
+---
+
+Load packages:
+```{r}
+library(tidyverse)
+library(paramtest)
+library(parallel)
+```
+
+# Balafoutas et al. (2014):
+Observed frequencies of Third-Party Punishment (3PP) in Experimental Conditions:
+
+```{r}
+data <- matrix(c(20,20,36,4), nrow = 2, 
+               dimnames = list(c("No Punish","Punish"),
+                       c("No Counterpunishment","Counterpunishment")))
+```
+
+Balafoutas et al. performed a Fisher's exact test to test whether the frequency of 3PP differed across conditions:
+
+```{r}
+fisher.test(data)
+```
+
+**Main Result:** The decision to exert 3PP significantly depend on whether or not there is a risk of being counterpunished.
+
+# Power Simulation:
+We base our power simulation on the reported effect size (i.e., difference in frequencies).
+
+## Parameters based on Balafoutas et al. (2014):
+
+Sample Size: N = 80 (40 per cell)
+Probability of 3PP in "No Counterpunishment" condition: prob1 = 20/40 = .5
+Probability of 3PP in "Counterpunishment" condition: prob2 = 4/40 = .1
+
+## Simulation function:
+
+```{r}
+fisher_sim <- function(simNum,N,prob1,prob2){ #necessary parameters.
+  
+cond <- rep(0:1, N/2) #Experimental Condition. 0 = No Counterpunishment, 1 = Counterpunishment.
+df <- as.data.frame(cond) #Create data set.
+df$punish <- ifelse(cond == 0, rbinom(N/2,1,prob = prob1),
+                    rbinom(N/2,1,prob = prob2)) #Conditional binomial distribution based on Condition.
+tab <- table(df$cond, df$punish) #Create contingency table.
+
+test <- fisher.test(tab) #Run Fisher's exact test 
+#Consider to change to Chi-squared with bigger samples)
+# test <- chisq.test(tab)
+
+p <- test$p.value #Extract p-value from test output.
+sig <- p < .05 #Returns TRUE if p-value < alpha.
+return(c(p = p, sig = sig))
+}
+```
+
+## Parallel Iterations:
+
+Detect number of cores that your computer can use for performing parallel iterations.
+```{r}
+detectCores()
+```
+
+Perform power simulation with 1000 iterations:
+```{r}
+set.seed(1234) #Set seed to reproduce same results.
+power_log <- grid_search(fisher_sim,
+                         params = list(N = 80,
+                                       prob1 = .5,
+                                       prob2= .1),
+                         n.iter = 1000,
+                         output = "data.frame",
+                         parallel = "snow",
+                         ncpus = 8)
+```
+
+See results:
+```{r}
+power_log
+```
+
+Calculate Statistical Power:
+```{r}
+results(power_log) %>%
+  group_by(N.test) %>%
+  summarise(
+    power = mean(sig)
+  )
+```
+
+# EXERCISES
+
+We are interested in adding a condition to Ballafoutas experimental setup.
+We expect that in this new condition we will observe a lower frequency of punishment
+than in "0 - no counterpunishment", but greater than in "1 - counterpunishment".
+
+Thus, one first step is to check whether the sample size used by Balafoutas et al. (N = 80)
+would allow us to capture smaller differences between conditions with sufficient statistical power.
+
+## 1. ##
+Use the "fisher_sim" function we created to estimate the smallest difference we can capture
+with 90% power, given N = 80.
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+In case you wanted to plot your results:
+```{r}
+
+```
+
+
+## 2. ##
+Consider that we want to be able to capture differences of minimum .20,
+with at least 90% power. How much larger should our sample size be?
+
+CLUE 1: In this case, it will be more than a few, so think big!
+CLUE 2: Since sample sizes will get big, it would be recommendable to first
+change the Fisher's exact test for Chi-squared test in the simulation function, 
+because the latter performs better with big sample sizes. You can use the `chisq.test()`
+function for this purpose.
+
+### Simulation function:
+
+```{r}
+
+```
+
+### Parallel Iterations:
+
+```{r}
+
+```
+
+### Results:
+```{r}
+
+```
+
+###Calculate Statistical Power:
+```{r}
+
+```
+
+In case you want to plot your results:
+```{r}
+
+```
+
+
