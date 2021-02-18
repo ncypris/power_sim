@@ -1,1 +1,1 @@
-"# power_sim" 
+# power_sim
