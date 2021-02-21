@@ -22,19 +22,19 @@ lm_sim <- function(simNum, N, b1, b0 = 0) #necessary parameters
   
   con <- rnorm(N, 0, 1)
   
-  con %>% as_tibble() %>%
-  ggplot(aes(x = round(value, 1))) +
-    geom_bar() +
-    xlab("conscientiousness") +
-    theme_classic()
+  # con %>% as_tibble() %>%
+  # ggplot(aes(x = round(value, 1))) +
+  #   geom_bar() +
+  #   xlab("conscientiousness") +
+  #   theme_classic()
   
   rerror <- rnorm(N, 0, sqrt(1 - b1^2))
 
-  rerror %>% as_tibble() %>%
-  ggplot(aes(x = round(value, 1))) +
-    geom_bar() +
-    xlab("pro_env") +
-    theme_classic()
+  # rerror %>% as_tibble() %>%
+  # ggplot(aes(x = round(value, 1))) +
+  #   geom_bar() +
+  #   xlab("pro_env") +
+  #   theme_classic()
     
   y = b1*con + rerror
   
